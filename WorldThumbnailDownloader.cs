@@ -25,14 +25,14 @@
                 {
                     if (string.IsNullOrEmpty(world.ThumbnailImageUrl)) continue;
 
-                    var fileName = $"WorldThumbnail_{index.ToString("D5")}.jpg";
+                    var fileName = $"{index.ToString("D5")}.png";
                     var filePath = Path.Combine(folder, fileName);
 
                     try
                     {
                         var bytes = await client.GetByteArrayAsync(world.ThumbnailImageUrl);
                         await File.WriteAllBytesAsync(filePath, bytes);
-                        //Console.WriteLine($"[サムネDL] {fileName} ({world.Name})");
+                        //Console.WriteLine($"[サムネDL] {fileName} ({world.Name}){world.ThumbnailImageUrl}");
                         index++;
                     }
                     catch (HttpRequestException ex)

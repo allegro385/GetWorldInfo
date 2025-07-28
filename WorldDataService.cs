@@ -34,11 +34,11 @@
                     if (world.Tags != null && world.Tags.Count > 0)
                     {
                         // 除外したいプレフィックス
-                        string[] ignorePrefixes = { "author_tag_", "system_tag_" };
+                        string[] ignorePrefixes = {"system_" };
 
                         var filteredTags = world.Tags
-                            .Where(t => !ignorePrefixes.Any(prefix => t.StartsWith(prefix)))
-                            .Select(t => $"#{t}");
+                            .Where(t => !ignorePrefixes.Any(prefix => t.StartsWith(prefix)))                           
+                            .Select(t => $"#{t.Replace("author_tag_","")}");
 
                         if (filteredTags.Any())
                         {
@@ -48,12 +48,12 @@
                     }
 
                     //登録日付、更新日付追記
-                    world.Description += $"\n更新情報：公開日 {world.CreatedAt}/更新日 {world.UpdatedAt}";
+                    world.Description += $"\n更新情報：公開日 {world.CreatedAt.ToString("yyyy/MM/dd")} - 更新日 {world.UpdatedAt.ToString("yyyy/MM/dd")}";
 
                     // 説明文追記
                     if (!string.IsNullOrWhiteSpace(tsvWorld.DescriptionNote.Trim()))
                     {
-                        world.Description += $"\n個人メモ：\n{tsvWorld.DescriptionNote}";
+                        world.Description += $"\n個人メモ：{tsvWorld.DescriptionNote.Trim()}";
                     }
 
                     // カテゴリに追加

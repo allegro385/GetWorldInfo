@@ -1,4 +1,6 @@
-﻿namespace GetWorldInfo
+﻿//using VRChat.API.Model;
+
+namespace GetWorldInfo
 {
     public class JsonFileWriter
     {
@@ -27,10 +29,14 @@
 
             foreach (var category in categoriesWithWorlds)
             {
+                //頭3桁を除外したcategoryを取得
+                string categoryName = category.Category.Length > 3 ? category.Category.Substring(3) : category.Category;
 
                 var worldList = new List<object>();
                 foreach (var world in category.Worlds)
                 {
+
+
                     var worldDict = new Dictionary<string, object>
                     {
                         { "ID", world.Id },
@@ -56,7 +62,8 @@
 
                 ((List<object>)output["Categorys"]).Add(new Dictionary<string, object>
                 {
-                { "Category", category.Category },
+                //{ "Category", category.Category },
+                { "Category", categoryName },
                 { "Worlds", worldList }
                 });
             }

@@ -31,6 +31,7 @@ namespace GetWorldInfo
             {
                 Id = world.Id,
                 Name = world.Name,
+                AuthorName = world.AuthorName,
                 RecommendedCapacity = world.RecommendedCapacity,
                 Capacity = world.Capacity,
                 Description = world.Description,

@@ -77,7 +77,7 @@ namespace GetWorldInfo
 
                 //Console.WriteLine($"動画作成完了: {outputVideoPath}");
 
-                string ffmpegArgs =$"-r 1 -i %05d.png -vcodec libx264 -profile:v baseline -pix_fmt yuv420p -movflags +faststart {outputVideoPath}";
+                string ffmpegArgs = $"-r 1 -i %05d.png -vcodec libx264 -profile:v baseline -pix_fmt yuv420p -movflags +faststart {outputVideoPath}";
                 var psi = new ProcessStartInfo("ffmpeg", ffmpegArgs)
                 {
                     WorkingDirectory = folderPath,

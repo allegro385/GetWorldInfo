@@ -1,5 +1,5 @@
 VRChatのワールドポータルライブラリ用のjsonデータおよびサムネイル動画データを自動生成するC# (.NET8.0) プログラムです。
-PortalLibrarySystem:[ショップ]（https://booth.pm/ja/items/6659099）
+PortalLibrarySystem: [booth](https://booth.pm/ja/items/6659099)
 
 ---
 

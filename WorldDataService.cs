@@ -38,14 +38,30 @@ namespace GetWorldInfo
                     if (tsvWorld.IosSupported) world.Platform.iOS = true;
 
                     //tsvの個人メモを追加
-                    world.Memo = tsvWorld.DescriptionNote;
+                    world.Memo = tsvWorld.Memo;
 
                     // TSV用の情報を更新
-                    tsvWorld.WorldName = world.Name;
                     tsvWorld.Creator = world.AuthorName;
-                    tsvWorld.CreatedAt = world.CreatedAt.ToString("yyyy/MM/dd");
-                    tsvWorld.UpdatedAt = world.UpdatedAt.ToString("yyyy/MM/dd");
-                    tsvWorld.result = "◯";
+                    tsvWorld.WorldName = world.Name;
+                    tsvWorld.RecommendedCapacity = world.RecommendedCapacity;
+                    tsvWorld.Capacity = world.Capacity;
+
+                    tsvWorld.Isprivate = world.ReleaseStatus.ToString().ToLower() == "private";
+                    tsvWorld.CreatedAt = world.CreatedAt;
+                    tsvWorld.UpdatedAt = world.UpdatedAt;
+                    tsvWorld.Favorites = world.Favorites;
+                    tsvWorld.Visits = world.Visits;
+                    tsvWorld.Description = world.Description ?? string.Empty;
+                    tsvWorld.Tags = world.Tags ?? new List<string>();
+                    
+                    tsvWorld.result = "情報取得成功";
+
+                    // リスト除外のワールドはスキップ
+                    if (tsvWorld.Category == "99_リスト除外")
+                    {
+                        tsvWorld.result = "除外";
+                        continue;
+                    }
 
                     // カテゴリに追加
                     if (!categoryDict.ContainsKey(tsvWorld.Category))
@@ -56,7 +72,7 @@ namespace GetWorldInfo
                 }
                 catch (Exception)
                 {
-                    tsvWorld.result = "-";
+                    tsvWorld.result = "情報取得失敗";
                     Console.WriteLine($"Error fetching world data for ID: {tsvWorld.WorldId}");
                 }
             }

@@ -41,6 +41,8 @@ namespace GetWorldInfo
                 ReleaseStatus = world.ReleaseStatus,
                 CreatedAt = world.CreatedAt,
                 UpdatedAt = world.UpdatedAt,
+                Favorites = world.Favorites,
+                Visits = world.Visits,
                 Tags = world.Tags ?? new List<string>(),
                 ThumbnailImageUrl = world.ThumbnailImageUrl ?? string.Empty
 

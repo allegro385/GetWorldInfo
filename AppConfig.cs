@@ -10,6 +10,8 @@ namespace GetWorldInfo
         public string OutputPath { get; set; }
         public string OutputVideoName { get; set; }
 
+        public int shoriSign { get; set; }
+
         public static AppConfig Load(string path = "appsettings.json")
         {
             var json = File.ReadAllText(path);

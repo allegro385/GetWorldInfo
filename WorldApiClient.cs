@@ -1,4 +1,5 @@
-﻿using VRChat.API.Api;
+﻿using GetWorldInfo.Dto;
+using VRChat.API.Api;
 using VRChat.API.Client;
 using VRChat.API.Model;
 
@@ -27,6 +28,7 @@ namespace GetWorldInfo
             World world = worldApi.GetWorld($"{worldId}");
             await Task.Delay(300);
 
+            //WorldAPIからの情報を移送する
             return new WorldDto
             {
                 Id = world.Id,

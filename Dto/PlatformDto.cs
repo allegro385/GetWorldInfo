@@ -1,4 +1,4 @@
-﻿namespace GetWorldInfo
+﻿namespace GetWorldInfo.Dto
 {
     // プラットフォームDTO
     public class PlatformDto

@@ -8,15 +8,31 @@
 
             var apiClient = new WorldApiClient();
             var service = new WorldDataService(apiClient);
-            var tsvData = TsvFileReader.Read(config.InputTsvPath);
+
+            var tsvData = TsvFileReader.Read(Path.Combine(config.InputPath, $"{config.InputTsvName}"));
+
+            //出力フォルダの設定
+            var now = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+            var OutputPath = Path.Combine(config.OutputPath, $"{now}");
+            Directory.CreateDirectory(OutputPath);
 
             var categoriesWithWorlds = await service.GetCategoriesWithWorldsAsync(tsvData);
-            await JsonFileWriter.WriteWorldPortalJsonAsync(categoriesWithWorlds, config.OutputJsonPath);
 
-            var thumbnailFolder = await WorldThumbnailDownloader.DownloadAsync(categoriesWithWorlds, config.ThumbnailFolder);
-            await ThumbnailVideoCreator.CreateThumbnailVideoAsync(thumbnailFolder, config.OutputVideoPath);
+            //tsvファイルの出力
+            TsvFileWriter.Write(Path.Combine(OutputPath, $"{config.InputTsvName}"), tsvData);
 
-            Console.WriteLine($"✅ JSONファイル生成完了: {config.OutputJsonPath}");
+            //JSONファイルの出力
+            await JsonFileWriter.WriteWorldPortalJsonAsync(categoriesWithWorlds, Path.Combine(OutputPath, $"{config.OutputJsonName}"));
+
+            //サムネイルフォルダの作成
+            var ThumbnailPath = Path.Combine(OutputPath, "Thumbnail");
+            Directory.CreateDirectory(ThumbnailPath);
+
+            //サムネイル画像と動画の作成
+            await WorldThumbnailDownloader.DownloadAsync(categoriesWithWorlds, ThumbnailPath);
+            await ThumbnailVideoCreator.CreateThumbnailVideoAsync(ThumbnailPath, OutputPath, config.OutputVideoName);
+
+            Console.WriteLine($"処理完了");
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace GetWorldInfo
+﻿using GetWorldInfo.Dto;
+
+namespace GetWorldInfo
 {
     public class WorldThumbnailDownloader
     {
@@ -6,18 +8,15 @@
         /// サムネイル画像をダウンロードして指定フォルダに保存
         /// </summary>
         /// <param name="categoriesWithWorlds">全カテゴリ＋ワールドリスト</param>
-        /// <param name="baseFolder">ベースフォルダ</param>
-        /// <returns>保存先の新規フォルダパス</returns>
-        public static async Task<string> DownloadAsync(List<CategoryDto> categoriesWithWorlds, string baseFolder = ".")
+        /// <param name="outputPath">出力フォルダ</param>
+        public static async Task DownloadAsync(List<CategoryDto> categoriesWithWorlds, string outputPath)
         {
-            var now = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-            var folder = Path.Combine(baseFolder, $"Thumbnail_{now}");
-            Directory.CreateDirectory(folder);
-
-            int index = 1;
+            
             var client = new HttpClient();
             client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36");
             client.DefaultRequestHeaders.Referrer = new Uri("https://vrchat.com/");
+
+            int index = 1;
 
             foreach (var category in categoriesWithWorlds)
             {
@@ -26,7 +25,7 @@
                     if (string.IsNullOrEmpty(world.ThumbnailImageUrl)) continue;
 
                     var fileName = $"{index.ToString("D5")}.png";
-                    var filePath = Path.Combine(folder, fileName);
+                    var filePath = Path.Combine(outputPath, fileName);
 
                     try
                     {
@@ -41,7 +40,6 @@
                     }
                 }
             }
-            return folder;
         }
     }
 }

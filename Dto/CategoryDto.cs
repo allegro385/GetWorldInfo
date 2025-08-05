@@ -1,4 +1,4 @@
-﻿namespace GetWorldInfo
+﻿namespace GetWorldInfo.Dto
 {
     // カテゴリ＋ワールド集約用DTO
     public class CategoryDto

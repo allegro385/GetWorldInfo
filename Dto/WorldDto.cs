@@ -1,6 +1,6 @@
 ﻿using VRChat.API.Model;
 
-namespace GetWorldInfo
+namespace GetWorldInfo.Dto
 {
     // ワールド情報DTO
     public class WorldDto
@@ -18,5 +18,7 @@ namespace GetWorldInfo
         public int Favorites { get; set; }
         public List<string> Tags { get; set; } = new List<string>();
         public string ThumbnailImageUrl { get; set; } = string.Empty;
+
+        public string Memo { get; set; } = string.Empty;// 個人メモ
     }
 }

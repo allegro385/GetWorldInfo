@@ -1,5 +1,6 @@
-﻿namespace GetWorldInfo
+﻿namespace GetWorldInfo.Dto
 {
+    ///tsv形式のワールド情報DTO
     public class TsvWorldInfoDto
     {
         public string Category { get; set; }       // カテゴリ

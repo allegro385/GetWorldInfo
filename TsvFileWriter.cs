@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using GetWorldInfo.Dto;
+using System.Text;
 
 namespace GetWorldInfo
 {
@@ -17,7 +18,6 @@ namespace GetWorldInfo
 
                 sb.AppendLine($"{world.Category}\t{world.Creator}\t{world.WorldName}\t{quest}\t{ios}\t{isPrivate}\t{world.WorldURL}\t{world.DescriptionNote}\t{world.result}\t{world.CreatedAt}");
             }
-
             File.WriteAllText(path, sb.ToString(), Encoding.UTF8);
         }
     }

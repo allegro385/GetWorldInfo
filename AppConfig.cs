@@ -4,10 +4,11 @@ namespace GetWorldInfo
 {
     public class AppConfig
     {
-        public string InputTsvPath { get; set; }
-        public string OutputJsonPath { get; set; }
-        public string ThumbnailFolder { get; set; }
-        public string OutputVideoPath { get; set; }
+        public string InputPath { get; set; }
+        public string InputTsvName { get; set; }
+        public string OutputJsonName { get; set; }
+        public string OutputPath { get; set; }
+        public string OutputVideoName { get; set; }
 
         public static AppConfig Load(string path = "appsettings.json")
         {

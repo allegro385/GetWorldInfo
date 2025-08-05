@@ -54,12 +54,12 @@ namespace GetWorldInfo
                     tsvWorld.Description = world.Description ?? string.Empty;
                     tsvWorld.Tags = world.Tags ?? new List<string>();
                     
-                    tsvWorld.result = "情報取得成功";
+                    tsvWorld.Result = "情報取得成功";
 
                     // リスト除外のワールドはスキップ
                     if (tsvWorld.Category == "99_リスト除外")
                     {
-                        tsvWorld.result = "除外";
+                        tsvWorld.Result = "除外";
                         continue;
                     }
 
@@ -70,10 +70,10 @@ namespace GetWorldInfo
                     categoryDict[tsvWorld.Category].Add(world);
 
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    tsvWorld.result = "情報取得失敗";
-                    Console.WriteLine($"Error fetching world data for ID: {tsvWorld.WorldId}");
+                    tsvWorld.Result = $"情報取得失敗{e.Message}";
+                    //Console.WriteLine($"Error fetching world data for ID: {tsvWorld.WorldId}");
                 }
             }
 

@@ -17,7 +17,7 @@ namespace GetWorldInfo
                 string isPrivate = world.Isprivate ? "1" : "";
                 string tags = string.Join(",", world.Tags);
 
-                sb.AppendLine($"{world.Category}\t{world.Creator}\t{world.WorldName}\t{world.RecommendedCapacity}\t{world.Capacity}\t{quest}\t{ios}\t{isPrivate}\t{world.CreatedAt:yyyy-MM-dd HH:mm:ss}\t{world.UpdatedAt:yyyy-MM-dd HH:mm:ss}\t{world.Favorites}\t{world.Visits}\t{world.WorldURL}\t{tags}\t{world.Description}\t{world.Memo}\t{world.result}");
+                sb.AppendLine($"{world.Category}\t{world.Creator}\t{world.WorldName}\t{world.RecommendedCapacity}\t{world.Capacity}\t{quest}\t{ios}\t{isPrivate}\t{world.CreatedAt:yyyy-MM-dd HH:mm:ss}\t{world.UpdatedAt:yyyy-MM-dd HH:mm:ss}\t{world.Favorites}\t{world.Visits}\t{world.WorldURL}\t{tags}\t{world.Description}\t{world.Memo}\t{world.Result}");
 
             }
             File.WriteAllText(path, sb.ToString(), Encoding.UTF8);

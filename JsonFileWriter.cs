@@ -28,7 +28,7 @@ namespace GetWorldInfo
             foreach (var category in categoriesWithWorlds)
             {
                 //カテゴリの頭3桁はソート用プレフィックスのため除外したcategoryを取得
-                string categoryName = category.Category.Length > 4 ? category.Category.Substring(3) : category.Category;
+                string categoryName = category.Category.Length > 3 ? category.Category.Substring(3) : category.Category;
 
                 var worldList = new List<object>();
                 foreach (var world in category.Worlds)

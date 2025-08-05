@@ -13,7 +13,7 @@ namespace GetWorldInfo
             for (int i = 1; i < lines.Length; i++) // 1行目はヘッダー
             {
                 var parts = lines[i].Split('\t');
-                if (parts.Length < 8) continue;
+                if (parts.Length < 16) continue;
 
                 // URLからworldId抽出
                 string url = parts[12];
@@ -38,7 +38,7 @@ namespace GetWorldInfo
                     Tags = parts[13].Split(',').Select(tag => tag.Trim()).ToList(),
                     Description = parts[14],
                     Memo = parts[15],
-                    result = ""
+                    Result = ""
                 });
             }
             return result;

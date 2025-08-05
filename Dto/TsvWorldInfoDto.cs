@@ -20,6 +20,6 @@
         public string Description { get; set; } = string.Empty;// 説明
         public string Memo { get; set; }        // 個人メモ
         public string WorldId { get; set; }     // URLから抽出
-        public string result { get; set; }
+        public string Result { get; set; }
     }
 }

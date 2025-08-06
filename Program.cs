@@ -20,13 +20,11 @@
                 var OutputPath = Path.Combine(config.OutputPath, $"{now}");
                 Directory.CreateDirectory(OutputPath);
 
-                var categoriesWithWorlds = await service.GetCategoriesWithWorldsAsync(tsvData);
+                var worldList = await service.GetCategoriesWithWorldsAsync(tsvData);
 
                 //tsvファイルの出力
-                TsvFileWriter.Write(Path.Combine(OutputPath, $"{config.InputTsvName}"), tsvData);
+                TsvFileWriter.Write(Path.Combine(OutputPath, $"{config.InputTsvName}"), worldList);
 
-                //JSONファイルの出力
-                await JsonFileWriter.WriteWorldPortalJsonAsync(categoriesWithWorlds, Path.Combine(OutputPath, $"{config.OutputJsonName}"));
 
                 if (config.shoriSign >= 2)
                 {
@@ -36,9 +34,23 @@
                     var ThumbnailPath = Path.Combine(OutputPath, "Thumbnail");
                     Directory.CreateDirectory(ThumbnailPath);
 
-                    //サムネイル画像と動画の作成
-                    await WorldThumbnailDownloader.DownloadAsync(categoriesWithWorlds, ThumbnailPath);
-                    await ThumbnailVideoCreator.CreateThumbnailVideoAsync(ThumbnailPath, OutputPath, config.OutputVideoName);
+                    //サムネイル画像の取得
+                    var thumbnailDownloader = new WorldThumbnailDownloader();
+                    await thumbnailDownloader.DownloadAsync(worldList, ThumbnailPath);
+
+                    //カテゴリごとにワールドをまとめる
+                    var categoriesWithWorlds = new AggregationByCategories().Aggregate(worldList);
+
+                    //JSONファイルの出力
+                    await JsonFileWriter.WriteWorldPortalJsonAsync(categoriesWithWorlds, Path.Combine(OutputPath, $"{config.OutputJsonName}"));
+
+                    //サムネイル動画の作成
+                    var ThumbnailPath1 = Path.Combine(OutputPath, "Thumbnail_1");
+                    Directory.CreateDirectory(ThumbnailPath1);
+
+                    thumbnailDownloader.CopyThumbnails(categoriesWithWorlds, ThumbnailPath1);
+
+                    await ThumbnailVideoCreator.CreateThumbnailVideoAsync(ThumbnailPath1, OutputPath, config.OutputVideoName);
                 }
             }
             Console.WriteLine($"処理完了");

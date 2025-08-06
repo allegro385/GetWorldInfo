@@ -1,9 +1,16 @@
 ﻿using GetWorldInfo.Dto;
+using System;
+using System.Collections.Generic;
 
 namespace GetWorldInfo
 {
     public class WorldThumbnailDownloader
     {
+        /// <summary>
+        /// WorldのIDとサムネイル画像Pathの辞書
+        /// </summary>
+        private Dictionary<string,string> ImageDictionary = new Dictionary<string, string>();
+
         private static readonly HttpClient client = new HttpClient();
         static WorldThumbnailDownloader()
         {
@@ -14,32 +21,68 @@ namespace GetWorldInfo
         /// <summary>
         /// サムネイル画像をダウンロードして指定フォルダに保存
         /// </summary>
-        /// <param name="categoriesWithWorlds">全カテゴリ＋ワールドリスト</param>
+        /// <param name="worlds">ワールドリスト</param>
         /// <param name="outputPath">出力フォルダ</param>
-        public static async Task DownloadAsync(List<CategoryDto> categoriesWithWorlds, string outputPath)
+        public async Task DownloadAsync(List<WorldDto> worlds, string outputPath)
         {       
             int index = 1;
+            foreach (var world in worlds)
+            {
+                if (string.IsNullOrEmpty(world.ThumbnailImageUrl)) continue;
 
-            foreach (var category in categoriesWithWorlds)
+                if(ImageDictionary.ContainsKey(world.Id)) {
+                    // 既にダウンロード済みのサムネイルはスキップ
+                    continue;
+                }
+
+                var fileName = $"{index.ToString("D5")}.png";
+                var filePath = Path.Combine(outputPath, fileName);
+
+                try
+                {
+                    var bytes = await client.GetByteArrayAsync(world.ThumbnailImageUrl);
+                    await File.WriteAllBytesAsync(filePath, bytes);
+                    ImageDictionary[world.Id] = filePath; // IDとファイル名を記録
+                    index++;
+                }
+                catch (HttpRequestException ex)
+                {
+                    Console.WriteLine($"[DL失敗] {world.Name}({world.Id}) - {ex.Message}");
+                }
+            }            
+        }
+
+        /// <summary>
+        /// 設定済みのサムネイル画像ファイル名からイメージ画像をコピーするメソッド
+        /// <param name="categories">カテゴリリスト</param>
+        /// <paramref name="outputPath">出力パス</paramref>
+        /// </summary>
+        public void CopyThumbnails(List<CategoryDto> categories, string outputPath)
+        {
+            var index = 1;
+
+            foreach (var category in categories)
             {
                 foreach (var world in category.Worlds)
                 {
-                    if (string.IsNullOrEmpty(world.ThumbnailImageUrl)) continue;
-
-                    var fileName = $"{index.ToString("D5")}.png";
-                    var filePath = Path.Combine(outputPath, fileName);
-
+                    if (!ImageDictionary.ContainsKey(world.Id)) continue;
+                    var sourcePath = ImageDictionary[world.Id];
+                    var destPath = Path.Combine(outputPath, $"{index.ToString("D5")}.png");
                     try
                     {
-                        //var bytes = await client.GetByteArrayAsync(world.ThumbnailImageUrl);
-                        var bytes = await client.GetByteArrayAsync(world.ThumbnailImageUrl);
-                        await File.WriteAllBytesAsync(filePath, bytes);
-                        //Console.WriteLine($"[サムネDL] {fileName} ({world.Name}){world.ThumbnailImageUrl}");
-                        index++;
+                        if (File.Exists(sourcePath))
+                        {
+                            File.Copy(sourcePath, destPath, true);
+                            index++;
+                        }
+                        else
+                        {
+                            Console.WriteLine($"[ファイル未検出] {sourcePath}");
+                        }
                     }
-                    catch (HttpRequestException ex)
+                    catch (Exception ex)
                     {
-                        Console.WriteLine($"[DL失敗] {world.Name}({world.Id}) - {ex.Message}");
+                        Console.WriteLine($"[コピー失敗] {world.Name}({world.Id}) - {ex.Message}");
                     }
                 }
             }

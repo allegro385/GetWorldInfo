@@ -36,7 +36,6 @@ namespace GetWorldInfo.Dto
         public string Description { get; set; } = string.Empty;
 
         public string ThumbnailImageUrl { get; set; } = string.Empty;
-
         /// <summary>
         /// URL（入力データから取得）
         /// </summary>

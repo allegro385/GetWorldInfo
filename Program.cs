@@ -42,7 +42,7 @@
                     var categoriesWithWorlds = new AggregationByCategories().Aggregate(worldList);
 
                     //JSONファイルの出力
-                    await JsonFileWriter.WriteWorldPortalJsonAsync(categoriesWithWorlds, Path.Combine(OutputPath, $"{config.OutputJsonName}"));
+                    await JsonFileWriter.WriteWorldPortalJsonAsync(categoriesWithWorlds, Path.Combine(OutputPath, $"{config.OutputJsonName1}"));
 
                     //サムネイル動画の作成
                     var ThumbnailPath1 = Path.Combine(OutputPath, "Thumbnail_1");
@@ -50,7 +50,25 @@
 
                     thumbnailDownloader.CopyThumbnails(categoriesWithWorlds, ThumbnailPath1);
 
-                    await ThumbnailVideoCreator.CreateThumbnailVideoAsync(ThumbnailPath1, OutputPath, config.OutputVideoName);
+                    await ThumbnailVideoCreator.CreateThumbnailVideoAsync(ThumbnailPath1, OutputPath, config.OutputVideoName1);
+
+                    if (config.shoriSign >= 3)
+                    {
+                        Console.WriteLine("サムネイル動画の作成2");
+                        //カテゴリごとにワールドをまとめる
+                        var categoriesWithTags = new AggregationByTags().Aggregate(worldList);
+
+                        //JSONファイルの出力
+                        await JsonFileWriter.WriteWorldPortalJsonAsync(categoriesWithTags, Path.Combine(OutputPath, $"{config.OutputJsonName2}"));
+
+                        //サムネイル動画の作成
+                        var ThumbnailPath2 = Path.Combine(OutputPath, "Thumbnail_2");
+                        Directory.CreateDirectory(ThumbnailPath2);
+
+                        thumbnailDownloader.CopyThumbnails(categoriesWithTags, ThumbnailPath2);
+
+                        await ThumbnailVideoCreator.CreateThumbnailVideoAsync(ThumbnailPath2, OutputPath, config.OutputVideoName2);
+                    }
                 }
             }
             Console.WriteLine($"処理完了");
